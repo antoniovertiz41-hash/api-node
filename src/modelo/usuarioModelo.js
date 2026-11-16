@@ -13,10 +13,10 @@ class UsuarioModelo {
         return usuarios.find(u => u.id === parseInt(id));
     }
 
-    // Crea y guarda un usuario con un id basado en el tamano actual del arreglo.
+    // Crea y guarda un usuario con el mismo contrato expuesto por la API: email.
     static crear(datos) {
         const nuevoUsuario = {
-            id: usuarios.length + 1,
+            id: Math.max(0, ...usuarios.map((usuario) => usuario.id)) + 1,
             nombre: datos.nombre,
             email: datos.email
         };
@@ -31,7 +31,7 @@ class UsuarioModelo {
 
         // Actualizamos los campos del usuario
         usuario.nombre = datos.nombre || usuario.nombre;
-        usuario.correo = datos.correo || usuario.correo;
+        usuario.email = datos.email || usuario.email;
         return usuario;
     }
 
