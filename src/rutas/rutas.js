@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Los controladores contienen la logica; este modulo solo declara el contrato HTTP.
-const UsuarioControlador = require('../controlador/usuarioControlador');
+const UsuarioControlador = require('../controlador/clientesControlador');
 // GET /api/ -> lista todos los usuarios.
  router.get('/', UsuarioControlador.obtenerUsuarios);
 
