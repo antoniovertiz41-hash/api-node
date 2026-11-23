@@ -17,4 +17,27 @@ app.use('/api/productos', productosRouter);
 app.use('/api/pedidos', pedidosRouter);
 app.use('/api/detalle-pedido', detallePedidoRouter);
 
+app.use((req, res) => {
+  res.status(404).json({
+    exito: false,
+    mensaje: 'Ruta no encontrada'
+  });
+});
+
+
+app.use((err, req, res, next) => {
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({
+      exito: false,
+      mensaje: 'El cuerpo de la petición no es un JSON válido'
+    });
+  }
+
+  console.error('Error no controlado:', err);
+  return res.status(500).json({
+    exito: false,
+    mensaje: 'Error interno del servidor'
+  });
+});
+
 module.exports = app;
