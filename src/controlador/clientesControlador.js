@@ -1,4 +1,5 @@
 const UsuarioModelo = require('../modelo/clientesModelo');
+const FORMATO_FECHA = /^\d{4}-\d{2}-\d{2}$/;
 
 class UsuarioControlador {
     static async obtenerUsuarios(req, res) {
@@ -51,6 +52,14 @@ class UsuarioControlador {
             });
         }
 
+                if (fecha_registro !== undefined &&
+            (typeof fecha_registro !== 'string' || !FORMATO_FECHA.test(fecha_registro))) {
+            return res.status(400).json({
+                exito: false,
+                mensaje: 'La fecha_registro debe tener el formato YYYY-MM-DD'
+            });
+        }
+
         try {
             const nuevoCliente = await UsuarioModelo.crear({
                 nombre: nombre.trim(),
@@ -85,8 +94,14 @@ class UsuarioControlador {
         if (typeof datos.ciudad === 'string' && datos.ciudad.trim()) {
             datosLimpios.ciudad = datos.ciudad.trim();
         }
-        if (typeof datos.fecha_registro === 'string' && datos.fecha_registro.trim()) {
-            datosLimpios.fecha_registro = datos.fecha_registro.trim();
+        if (datos.fecha_registro !== undefined) {
+            if (typeof datos.fecha_registro !== 'string' || !FORMATO_FECHA.test(datos.fecha_registro)) {
+                return res.status(400).json({
+                    exito: false,
+                    mensaje: 'La fecha_registro debe tener el formato YYYY-MM-DD'
+                });
+            }
+            datosLimpios.fecha_registro = datos.fecha_registro;
         }
 
         try {

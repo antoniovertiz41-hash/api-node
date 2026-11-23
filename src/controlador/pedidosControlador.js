@@ -1,4 +1,5 @@
 const PedidosModelo = require('../modelo/pedidosModelo');
+const FORMATO_FECHA = /^\d{4}-\d{2}-\d{2}$/;
 
 class PedidosControlador {
     static async obtenerPedidos(req, res) {
@@ -93,6 +94,14 @@ class PedidosControlador {
             });
         }
 
+        if (fecha_pedido !== undefined &&
+            (typeof fecha_pedido !== 'string' || !FORMATO_FECHA.test(fecha_pedido))) {
+            return res.status(400).json({
+                exito: false,
+                mensaje: 'La fecha_pedido debe tener el formato YYYY-MM-DD'
+            });
+        }
+
         try {
             const pedido = await PedidosModelo.crearPedido({
                 id_cliente: Number(id_cliente),
@@ -147,15 +156,13 @@ class PedidosControlador {
             datosLimpios.id_empleado = Number(datos.id_empleado);
         }
 
-        if (datos.fecha_pedido !== undefined) {
-            if (typeof datos.fecha_pedido !== 'string' || !datos.fecha_pedido.trim()) {
-                return res.status(400).json({
-                    exito: false,
-                    mensaje: 'La fecha_pedido debe ser una cadena válida (YYYY-MM-DD)'
-                });
-            }
-            datosLimpios.fecha_pedido = datos.fecha_pedido.trim();
+        if (typeof datos.fecha_pedido !== 'string' || !FORMATO_FECHA.test(datos.fecha_pedido)) {
+            return res.status(400).json({
+                exito: false,
+                mensaje: 'La fecha_pedido debe tener el formato YYYY-MM-DD'
+            });
         }
+        datosLimpios.fecha_pedido = datos.fecha_pedido;
 
         if (datos.canal !== undefined) {
             if (typeof datos.canal !== 'string' || !datos.canal.trim()) {
