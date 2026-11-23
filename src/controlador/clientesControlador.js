@@ -1,10 +1,10 @@
-const UsuarioModelo = require('../modelo/clientesModelo');
+const ClientesModelo = require('../modelo/clientesModelo');
 const FORMATO_FECHA = /^\d{4}-\d{2}-\d{2}$/;
 
-class UsuarioControlador {
-    static async obtenerUsuarios(req, res) {
+class ClientesControlador {
+    static async obtenerClientes(req, res) {
         try {
-            const clientes = await UsuarioModelo.obtenerUsuarios();
+            const clientes = await ClientesModelo.obtenerClientes();
             return res.status(200).json({
                 exito: true,
                 mensaje: 'Clientes obtenidos correctamente',
@@ -19,9 +19,9 @@ class UsuarioControlador {
         }
     }
 
-    static async obtenerUsuarioPorId(req, res) {
+    static async obtenerClientePorId(req, res) {
         try {
-            const cliente = await UsuarioModelo.obtenerUsuarioPorId(req.params.id);
+            const cliente = await ClientesModelo.obtenerClientePorId(req.params.id);
             if (!cliente) {
                 return res.status(404).json({
                     exito: false,
@@ -52,7 +52,7 @@ class UsuarioControlador {
             });
         }
 
-                if (fecha_registro !== undefined &&
+        if (fecha_registro !== undefined &&
             (typeof fecha_registro !== 'string' || !FORMATO_FECHA.test(fecha_registro))) {
             return res.status(400).json({
                 exito: false,
@@ -61,7 +61,7 @@ class UsuarioControlador {
         }
 
         try {
-            const nuevoCliente = await UsuarioModelo.crear({
+            const nuevoCliente = await ClientesModelo.crear({
                 nombre: nombre.trim(),
                 ciudad: ciudad.trim(),
                 fecha_registro: typeof fecha_registro === 'string' && fecha_registro.trim()
@@ -75,7 +75,6 @@ class UsuarioControlador {
                 datos: nuevoCliente
             });
         } catch (error) {
-            console.error('Error real:', error);
             console.error('Error al crear cliente:', error);
             return res.status(500).json({
                 exito: false,
@@ -105,7 +104,7 @@ class UsuarioControlador {
         }
 
         try {
-            const clienteActualizado = await UsuarioModelo.actualizar(req.params.id, datosLimpios);
+            const clienteActualizado = await ClientesModelo.actualizar(req.params.id, datosLimpios);
             if (!clienteActualizado) {
                 return res.status(404).json({
                     exito: false,
@@ -127,35 +126,35 @@ class UsuarioControlador {
         }
     }
 
-static async eliminar(req, res) {
-    try {
-        const eliminado = await UsuarioModelo.eliminar(req.params.id);
+    static async eliminar(req, res) {
+        try {
+            const eliminado = await ClientesModelo.eliminar(req.params.id);
 
-        if (!eliminado) {
-            return res.status(404).json({
+            if (!eliminado) {
+                return res.status(404).json({
+                    exito: false,
+                    mensaje: 'Cliente no encontrado'
+                });
+            }
+
+            return res.status(200).json({
+                exito: true,
+                mensaje: 'Cliente eliminado correctamente'
+            });
+        } catch (error) {
+            if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+                return res.status(409).json({
+                    exito: false,
+                    mensaje: 'No se puede eliminar el registro porque tiene pedidos asociados'
+                });
+            }
+            console.error('Error al eliminar cliente:', error);
+            return res.status(500).json({
                 exito: false,
-                mensaje: 'Cliente no encontrado'
+                mensaje: 'Error al eliminar el cliente'
             });
         }
-
-        return res.status(200).json({
-            exito: true,
-            mensaje: 'Cliente eliminado correctamente'
-        });
-    } catch (error) {
-        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
-            return res.status(409).json({
-                exito: false,
-                mensaje: 'No se puede eliminar el registro porque tiene pedidos asociados'
-            });
-        }
-        console.error('Error al eliminar cliente:', error);
-        return res.status(500).json({
-            exito: false,
-            mensaje: 'Error al eliminar el cliente'
-        });
     }
 }
-}
 
-module.exports = UsuarioControlador;
+module.exports = ClientesControlador;

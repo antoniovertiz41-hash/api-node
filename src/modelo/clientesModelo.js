@@ -1,12 +1,12 @@
 const pool = require('../config/bd');
 
-class UsuarioModelo {
-    static async obtenerUsuarios() {
+class ClientesModelo {
+    static async obtenerClientes() {
         const [rows] = await pool.query('SELECT * FROM clientes');
         return rows;
     }
 
-    static async obtenerUsuarioPorId(id) {
+    static async obtenerClientePorId(id) {
         const [rows] = await pool.query('SELECT * FROM clientes WHERE id_cliente = ?', [id]);
         return rows[0];
     }
@@ -26,7 +26,7 @@ class UsuarioModelo {
     }
 
     static async actualizar(id, datos) {
-        const clienteActual = await this.obtenerUsuarioPorId(id);
+        const clienteActual = await this.obtenerClientePorId(id);
         if (!clienteActual) return null;
 
         const nombre = datos.nombre || clienteActual.nombre;
@@ -51,7 +51,7 @@ class UsuarioModelo {
         return result.affectedRows > 0;
     }
 
-    
+
 }
 
-module.exports = UsuarioModelo;
+module.exports = ClientesModelo;

@@ -58,7 +58,6 @@ class EmpleadosControlador {
                 datos: empleado
             });
         } catch (error) {
-            console.error('Error real:', error);
             return res.status(500).json({ exito: false, mensaje: 'Error al crear el empleado' });
         }
     }
