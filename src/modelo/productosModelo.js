@@ -50,12 +50,12 @@ class ProductosModelo {
     }
 
     static async obtenerConCategoria() {
-        const [rows] = await pool.query(`
-        SELECT p.id_producto, p.nombre, p.precio, p.costo, p.stock,
+        const [rows] = await pool.query(
+        `SELECT p.id_producto, p.nombre, p.precio, p.costo, p.stock,
                p.id_categoria, c.nombre AS categoria
         FROM productos p
-        LEFT JOIN categorias c ON p.id_categoria = c.id_categoria
-    `);
+        INNER JOIN categorias c ON p.id_categoria = c.id_categoria`
+    );
         return rows;
     }
 }
