@@ -1,7 +1,12 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const UsuarioControlador = require('../src/controlador/usuarioControlador');
+
+const CategoriasControlador = require('../src/controlador/categoriasControlador');
+const ClientesControlador = require('../src/controlador/clientesControlador');
 const EmpleadosControlador = require('../src/controlador/empleadosControlador');
+const ProductosControlador = require('../src/controlador/productosControlador');
+const PedidosControlador = require('../src/controlador/pedidosControlador');
+const DetallePedidoControlador = require('../src/controlador/detallePedidoControlador');
 
 function response() {
     return {
@@ -18,38 +23,54 @@ function response() {
     };
 }
 
-test('POST /api creates a user with nombre and email', () => {
+test('POST /api/categorias rechaza un nombre faltante', async () => {
     const res = response();
-    UsuarioControlador.crear({ body: { nombre: 'Ana', email: 'ana@example.com' } }, res);
-
-    assert.equal(res.statusCode, 201);
-    assert.equal(res.body.usuario.nombre, 'Ana');
-    assert.equal(res.body.usuario.email, 'ana@example.com');
+    await CategoriasControlador.crearCategoria({ body: {} }, res);
+    assert.equal(res.statusCode, 400);
+    assert.equal(res.body.exito, false);
 });
 
-test('PUT /api/:id updates the same email field used by POST', () => {
+test('POST /api/clientes rechaza cuando falta la ciudad', async () => {
     const res = response();
-    UsuarioControlador.actualizar({
-        params: { id: '1' },
-        body: { email: 'actualizado@example.com' }
-    }, res);
-
-    assert.equal(res.statusCode, 200);
-    assert.equal(res.body.datos.email, 'actualizado@example.com');
+    await ClientesControlador.crear({ body: { nombre: 'Ana' } }, res);
+    assert.equal(res.statusCode, 400);
 });
 
-test('POST /api rejects a missing email and an absent body', () => {
-    const missingEmail = response();
-    UsuarioControlador.crear({ body: { nombre: 'Ana' } }, missingEmail);
-    assert.equal(missingEmail.statusCode, 400);
-
-    const absentBody = response();
-    UsuarioControlador.crear({}, absentBody);
-    assert.equal(absentBody.statusCode, 400);
-});
-
-test('POST /api/empleados rejects fields before database access', async () => {
+test('POST /api/empleados rechaza cuando falta el area', async () => {
     const res = response();
     await EmpleadosControlador.crearEmpleado({ body: { nombre: 'Ana' } }, res);
+    assert.equal(res.statusCode, 400);
+});
+
+test('POST /api/productos rechaza un cuerpo vacio', async () => {
+    const res = response();
+    await ProductosControlador.crearProducto({}, res);
+    assert.equal(res.statusCode, 400);
+});
+
+test('POST /api/productos rechaza un precio negativo', async () => {
+    const res = response();
+    await ProductosControlador.crearProducto(
+        { body: { nombre: 'Mouse', id_categoria: 1, precio: -5, costo: 10, stock: 3 } },
+        res
+    );
+    assert.equal(res.statusCode, 400);
+});
+
+test('POST /api/pedidos rechaza un id_cliente invalido', async () => {
+    const res = response();
+    await PedidosControlador.crearPedido(
+        { body: { id_cliente: 'abc', id_empleado: 1, canal: 'Web' } },
+        res
+    );
+    assert.equal(res.statusCode, 400);
+});
+
+test('POST /api/detalle-pedido rechaza una cantidad de cero', async () => {
+    const res = response();
+    await DetallePedidoControlador.crearDetalle(
+        { body: { id_pedido: 1, id_producto: 1, cantidad: 0, precio_unitario: 100 } },
+        res
+    );
     assert.equal(res.statusCode, 400);
 });
