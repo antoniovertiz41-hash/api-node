@@ -5,7 +5,6 @@ const categoriasRouter = require('./src/rutas/categoriasRutas');
 const productosRouter = require('./src/rutas/productosRutas');
 const pedidosRouter = require('./src/rutas/pedidosRutas');
 const detallePedidoRouter = require('./src/rutas/detallePedidoRutas');
-
 const app = express();
 
 app.use(express.json());
