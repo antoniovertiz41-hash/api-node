@@ -10,4 +10,5 @@ router.post('/', DetallePedidoControlador.crearDetalle);
 router.put('/:id', DetallePedidoControlador.actualizarDetalle);
 router.delete('/:id', DetallePedidoControlador.eliminarDetalle);
 
+
 module.exports = router;
