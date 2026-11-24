@@ -52,7 +52,6 @@ class PedidosControlador {
         }
     }
 
-    // Endpoint INNER JOIN: pedidos + clientes
     static async obtenerPedidosConCliente(req, res) {
         try {
             const pedidos = await PedidosModelo.obtenerConCliente();
