@@ -40,5 +40,4 @@ class EmpleadosModelo {
         return result.affectedRows > 0;
     }
 }
-
 module.exports = EmpleadosModelo;
