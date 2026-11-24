@@ -20,6 +20,7 @@ class EmpleadosControlador {
 
     static async obtenerEmpleadoPorId(req, res) {
         return EmpleadosControlador.responderEmpleadoPorId(req.params.id, res);
+        
     }
 
     static async responderEmpleadoPorId(id, res) {
