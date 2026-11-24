@@ -140,6 +140,7 @@ class CategoriasControlador {
                 exito: true,
                 mensaje: 'Categoría eliminada correctamente'
             });
+            
         } catch (error) {
             if (error.code === 'ER_ROW_IS_REFERENCED_2') {
                 return res.status(409).json({
