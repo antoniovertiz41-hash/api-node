@@ -7,7 +7,6 @@ const EmpleadosControlador = require('../src/controlador/empleadosControlador');
 const ProductosControlador = require('../src/controlador/productosControlador');
 const PedidosControlador = require('../src/controlador/pedidosControlador');
 const DetallePedidoControlador = require('../src/controlador/detallePedidoControlador');
-
 function response() {
     return {
         statusCode: undefined,
