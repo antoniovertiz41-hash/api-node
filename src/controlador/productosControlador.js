@@ -241,5 +241,4 @@ class ProductosControlador {
         }
     }
 }
-
 module.exports = ProductosControlador;
