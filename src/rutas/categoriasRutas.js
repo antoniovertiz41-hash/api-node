@@ -8,4 +8,5 @@ router.post('/', CategoriasControlador.crearCategoria);
 router.put('/:id', CategoriasControlador.actualizarCategoria);
 router.delete('/:id', CategoriasControlador.eliminarCategoria);
 
+
 module.exports = router;
