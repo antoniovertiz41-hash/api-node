@@ -50,8 +50,7 @@ class DetallePedidoControlador {
             });
         }
     }
-
-    // Endpoint INNER JOIN (detalle_pedido + productos + pedidos)
+    
     static async obtenerDetallePorPedido(req, res) {
         try {
             const detalles = await DetallePedidoModelo.obtenerDetallePorPedido(req.params.id);
@@ -77,7 +76,6 @@ class DetallePedidoControlador {
         }
     }
 
-    // Endpoint INNER JOIN + GROUP BY (resumen agregado)
     static async obtenerResumenPorProducto(req, res) {
         try {
             const resumen = await DetallePedidoModelo.obtenerResumenPorProducto();
