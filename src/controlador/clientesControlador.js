@@ -10,6 +10,7 @@ class ClientesControlador {
                 mensaje: 'Clientes obtenidos correctamente',
                 datos: clientes
             });
+            
         } catch (error) {
             console.error('Error al obtener clientes:', error);
             return res.status(500).json({
