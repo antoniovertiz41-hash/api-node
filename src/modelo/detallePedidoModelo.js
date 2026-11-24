@@ -1,20 +1,16 @@
 const pool = require('../config/bd');
 
 class DetallePedidoModelo {
-    // Obtiene todos los registros de detalle de pedido
     static async obtenerTodos() {
         const [rows] = await pool.query('SELECT * FROM detalle_pedido');
         return rows;
     }
 
-    // Obtiene un detalle específico por su ID
     static async obtenerPorId(id) {
         const [rows] = await pool.query('SELECT * FROM detalle_pedido WHERE id_detalle = ?', [id]);
         return rows[0];
     }
 
-    // Consulta INNER JOIN (detalle_pedido + productos + pedidos):
-    // Muestra el detalle de un pedido con nombre del producto, cantidad y precio
     static async obtenerDetallePorPedido(id_pedido) {
         const [rows] = await pool.query(`
             SELECT 
@@ -35,8 +31,6 @@ class DetallePedidoModelo {
         return rows;
     }
 
-    // Consulta INNER JOIN + GROUP BY:
-    // Resumen agregado del total de unidades y monto vendido por producto
     static async obtenerResumenPorProducto() {
         const [rows] = await pool.query(`
             SELECT 
@@ -52,7 +46,6 @@ class DetallePedidoModelo {
         return rows;
     }
 
-    // Crea un nuevo registro en detalle_pedido
     static async crearDetalle({ id_pedido, id_producto, cantidad, precio_unitario }) {
         const [result] = await pool.query(
             'INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio_unitario) VALUES (?, ?, ?, ?)',
@@ -67,7 +60,6 @@ class DetallePedidoModelo {
         };
     }
 
-    // Actualiza un detalle existente manteniendo los valores previos no enviados
     static async actualizarDetalle(id, datos) {
         const detalleActual = await this.obtenerPorId(id);
         if (!detalleActual) return null;
@@ -91,7 +83,6 @@ class DetallePedidoModelo {
         };
     }
 
-    // Elimina un detalle por su ID
     static async eliminarDetalle(id) {
         const [result] = await pool.query('DELETE FROM detalle_pedido WHERE id_detalle = ?', [id]);
         return result.affectedRows > 0;

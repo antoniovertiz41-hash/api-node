@@ -1,19 +1,16 @@
 const pool = require('../config/bd');
 
 class PedidosModelo {
-    // Obtiene todos los pedidos registrados
     static async obtenerTodos() {
         const [rows] = await pool.query('SELECT * FROM pedidos');
         return rows;
     }
 
-    // Obtiene un pedido específico por su ID
     static async obtenerPorId(id) {
         const [rows] = await pool.query('SELECT * FROM pedidos WHERE id_pedido = ?', [id]);
         return rows[0];
     }
 
-    // Consulta INNER JOIN: muestra los pedidos junto con el nombre del cliente
     static async obtenerConCliente() {
         const [rows] = await pool.query(`
             SELECT 
@@ -29,7 +26,6 @@ class PedidosModelo {
         return rows;
     }
 
-    // Crea un nuevo pedido
     static async crearPedido({ id_cliente, id_empleado, fecha_pedido, canal }) {
         const fecha = fecha_pedido || new Date().toISOString().split('T')[0];
         const [result] = await pool.query(
@@ -45,7 +41,6 @@ class PedidosModelo {
         };
     }
 
-    // Actualiza un pedido existente manteniendo los valores previos no enviados
     static async actualizarPedido(id, datos) {
         const pedidoActual = await this.obtenerPorId(id);
         if (!pedidoActual) return null;
@@ -69,7 +64,6 @@ class PedidosModelo {
         };
     }
 
-    // Elimina un pedido por su ID
     static async eliminarPedido(id) {
         const [result] = await pool.query('DELETE FROM pedidos WHERE id_pedido = ?', [id]);
         return result.affectedRows > 0;
