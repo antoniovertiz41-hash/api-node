@@ -8,4 +8,5 @@ router.post('/', EmpleadosControlador.crearEmpleado);
 router.put('/:id', EmpleadosControlador.actualizarEmpleado);
 router.delete('/:id', EmpleadosControlador.eliminarEmpleado);
 
+
 module.exports = router;
