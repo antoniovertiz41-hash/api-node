@@ -59,5 +59,4 @@ class ProductosModelo {
         return rows;
     }
 }
-
 module.exports = ProductosModelo;
